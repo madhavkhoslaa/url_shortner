@@ -1,3 +1,3 @@
 pub trait Hasher {
-    fn hash(&self) -> String;
+    fn hash(&mut self) -> String;
 }

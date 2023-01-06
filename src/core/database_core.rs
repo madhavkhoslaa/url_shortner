@@ -1,14 +1,12 @@
-use redis::Client;
-
 use crate::database::redis_proxy::RedisProxy;
 
-pub struct database_core {
-    client: RedisProxy,
+pub struct DatabaseCore {
+    pub client: RedisProxy,
 }
 
-impl database_core {
-    pub fn new() -> database_core {
-        database_core {
+impl DatabaseCore {
+    pub fn new() -> DatabaseCore {
+        DatabaseCore {
             client: RedisProxy::new(String::from("redis://127.0.0.1/")),
         }
     }
@@ -16,11 +14,15 @@ impl database_core {
         self.client.has(&url)
     }
     pub fn update_count(&self) {
-        let current_count = self.get_count();
+        let mut current_count = self.get_count();
+        current_count = current_count + 1;
         let _res = self.client.set("count", &current_count.to_string());
     }
 
     pub fn get_count(&self) -> usize {
-        self.client.get("count").unwrap().parse::<usize>().unwrap()
+        match self.client.get("count") {
+            Ok(count) => count.parse::<usize>().unwrap(),
+            Err(E) => 0,
+        }
     }
 }

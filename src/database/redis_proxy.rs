@@ -1,6 +1,5 @@
 extern crate redis;
-use redis::{cmd, Client, Commands, RedisError};
-
+use redis::{Client, Commands, RedisError};
 pub struct RedisProxy {
     client: Result<Client, RedisError>,
 }

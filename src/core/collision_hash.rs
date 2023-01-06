@@ -12,13 +12,10 @@ impl collision_hash {
             hashed_url: None,
         }
     }
-    fn get_idx(self) -> usize {
-        todo!();
-    }
 }
 
 impl traits::hash::Hasher for collision_hash {
-    fn hash(&self) -> String {
+    fn hash(&mut self) -> String {
         String::from("Collision Hash")
     }
 }

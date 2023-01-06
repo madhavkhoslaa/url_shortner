@@ -1,16 +1,15 @@
 use actix_web::{web, App, HttpServer};
-use redis::Commands;
 mod handlers;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-
+    // Initialise database core here so that it can be passed in application states
     HttpServer::new(|| {
         App::new()
             .route("/shorten", web::post().to(handlers::api::shorten_url))
             .route("/shorten", web::get().to(handlers::api::get_long_url))
     })
-    .bind(("127.0.0.1", 8000))?
+    .bind(("127.0.0.1", 8001))?
     .run()
     .await
 }
