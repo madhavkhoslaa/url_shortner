@@ -1,6 +1,4 @@
 use actix_web::{web, App, HttpServer};
-use redis::Commands;
-use url_shortner::database;
 mod handlers;
 
 #[actix_web::main]
