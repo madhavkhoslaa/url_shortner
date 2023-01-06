@@ -1,0 +1,8 @@
+version: '2'
+services:
+  # database: 
+  #   image: redis:latest
+  server: 
+    build: .
+    ports:
+      - 8080:8000
