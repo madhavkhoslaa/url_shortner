@@ -1,9 +1,9 @@
 use actix_web::{web, HttpResponse, Responder};
-use url_shortner::core::collision_hash;
-use url_shortner::extractors::input::{self};
 use url_shortner::core::base62_hash;
+use url_shortner::core::collision_hash;
 use url_shortner::extractors::input::hashType::base62_hash as enum_base62_hash;
 use url_shortner::extractors::input::hashType::collision_hash as enum_collision_hash;
+use url_shortner::extractors::input::{self};
 use url_shortner::traits::hash::Hasher;
 
 pub async fn shorten_url(url: web::Json<input::UrlDetails>) -> impl Responder {
