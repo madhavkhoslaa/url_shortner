@@ -1,8 +1,8 @@
 use actix_web::{web, HttpResponse, Responder};
 use url_shortner::core::base62_hash;
 use url_shortner::core::collision_hash;
-use url_shortner::extractors::input::HashType::Base62Hash ;
-use url_shortner::extractors::input::HashType::CollisionHash ;
+use url_shortner::extractors::input::HashType::Base62Hash;
+use url_shortner::extractors::input::HashType::CollisionHash;
 use url_shortner::extractors::input::{self};
 use url_shortner::traits::hash::Hasher;
 
