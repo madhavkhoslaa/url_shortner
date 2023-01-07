@@ -15,7 +15,7 @@ pub async fn shorten_url(url: web::Json<input::UrlDetails>) -> impl Responder {
         result = base62_hash.hash();
     }
     if url.hash_type == CollisionHash {
-        let mut collision_hash = collision_hash::collision_hash::new(url.url.clone());
+        let mut collision_hash = collision_hash::collision_hash::new(url.url.clone(), database_core::DatabaseCore::new());
         result = collision_hash.hash();
     }
     HttpResponse::Ok().body(result)
