@@ -24,6 +24,15 @@ pub async fn shorten_url(url: web::Json<input::UrlDetails>) -> impl Responder {
     HttpResponse::Ok().body(result)
 }
 
-pub async fn get_long_url() -> impl Responder {
-    HttpResponse::Ok().body("Returns a long URL ")
+pub async fn get_long_url(url: web::Json<input::UrlDetails>) -> impl Responder {
+    // Remove DB logic from here
+    // Take url data as string parameter
+    // Return redirection logic
+    // Save X-Agent details to a DB for analytics
+    let db = database_core::DatabaseCore::new();
+    let mut result = String::from("Not Found");
+    if db.client.has(&url.url) {
+        result = db.client.get(&url.url).unwrap();
+    }
+    HttpResponse::Ok().body(result)
 }

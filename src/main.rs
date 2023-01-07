@@ -1,6 +1,5 @@
 use actix_web::{web, App, HttpServer};
 mod handlers;
-use md5::{Digest, Md5};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
