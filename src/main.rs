@@ -1,4 +1,5 @@
 use actix_web::{web, App, HttpServer};
+use url_shortner::state::app_state::AppState;
 mod handlers;
 
 #[actix_web::main]
@@ -6,6 +7,7 @@ async fn main() -> std::io::Result<()> {
     // Initialise database core here so that it can be passed in application states
     HttpServer::new(|| {
         App::new()
+            .app_data(web::Data::new(AppState::new(String::from("redis://127.0.0.1/"))))
             .route("/shorten", web::post().to(handlers::api::shorten_url))
             .route("/shorten", web::get().to(handlers::api::get_long_url))
     })

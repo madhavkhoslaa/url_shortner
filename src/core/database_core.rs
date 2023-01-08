@@ -1,13 +1,13 @@
 use crate::database::redis_proxy::RedisProxy;
-
+#[derive(Debug, Clone)]
 pub struct DatabaseCore {
     pub client: RedisProxy,
 }
 
 impl DatabaseCore {
-    pub fn new() -> DatabaseCore {
+    pub fn new(url: String) -> DatabaseCore {
         DatabaseCore {
-            client: RedisProxy::new(String::from("redis://127.0.0.1/")),
+            client: RedisProxy::new(url),
         }
     }
     pub fn find_collision(&self, url: String) -> bool {

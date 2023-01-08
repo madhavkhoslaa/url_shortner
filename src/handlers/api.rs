@@ -5,31 +5,36 @@ use url_shortner::core::database_core;
 use url_shortner::extractors::input::HashType::Base62Hash;
 use url_shortner::extractors::input::HashType::CollisionHash;
 use url_shortner::extractors::input::{self};
+use url_shortner::state::app_state::AppState;
 use url_shortner::traits::hash::Hasher;
 
-pub async fn shorten_url(url: web::Json<input::UrlDetails>) -> impl Responder {
+pub async fn shorten_url(
+    url: web::Json<input::UrlDetails>,
+    appData: web::Data<AppState>,
+) -> impl Responder {
     let mut result: String = String::from("Incorrect Option");
     if url.hash_type == Base62Hash {
         let mut base62_hash =
-            base62_hash::Base62Hash::new(url.url.clone(), database_core::DatabaseCore::new());
+            base62_hash::Base62Hash::new(url.url.clone(), appData.database.clone());
         result = base62_hash.hash();
     }
     if url.hash_type == CollisionHash {
-        let mut collision_hash = collision_hash::collision_hash::new(
-            url.url.clone(),
-            database_core::DatabaseCore::new(),
-        );
+        let mut collision_hash =
+            collision_hash::collision_hash::new(url.url.clone(), appData.database.clone());
         result = collision_hash.hash();
     }
     HttpResponse::Ok().body(result)
 }
 
-pub async fn get_long_url(url: web::Json<input::UrlDetails>) -> impl Responder {
+pub async fn get_long_url(
+    url: web::Json<input::UrlDetails>,
+    appData: web::Data<AppState>,
+) -> impl Responder {
     // Remove DB logic from here
     // Take url data as string parameter
     // Return redirection logic
     // Save X-Agent details to a DB for analytics
-    let db = database_core::DatabaseCore::new();
+    let db = appData.database.clone();
     let mut result = String::from("Not Found");
     if db.client.has(&url.url) {
         result = db.client.get(&url.url).unwrap();
