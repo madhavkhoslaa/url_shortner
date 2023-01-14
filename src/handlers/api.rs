@@ -1,4 +1,5 @@
 use actix_web::{web, HttpResponse, Responder};
+use actix_web_lab::web::Redirect;
 use url_shortner::core::base62_hash;
 use url_shortner::core::collision_hash;
 use url_shortner::core::database_core;
@@ -27,17 +28,18 @@ pub async fn shorten_url(
 }
 
 pub async fn get_long_url(
-    url: web::Json<input::UrlDetails>,
+    hash: web::Path<(String,)>,
     appData: web::Data<AppState>,
 ) -> impl Responder {
     // Remove DB logic from here
     // Take url data as string parameter
     // Return redirection logic
     // Save X-Agent details to a DB for analytics
+    let hash_ = &hash.clone().0;
     let db = appData.database.clone();
     let mut result = String::from("Not Found");
-    if db.client.has(&url.url) {
-        result = db.client.get(&url.url).unwrap();
+    if db.client.has(hash_) {
+        result = db.client.get(&hash_).unwrap();
     }
-    HttpResponse::Ok().body(result)
+    Redirect::to(result)
 }

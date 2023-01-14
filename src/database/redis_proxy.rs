@@ -1,5 +1,5 @@
 extern crate redis;
-use redis::{Client, Commands, RedisError};
+use redis::{Client, Commands};
 #[derive(Debug, Clone)]
 
 pub struct RedisProxy {
@@ -8,14 +8,13 @@ pub struct RedisProxy {
 impl RedisProxy {
     pub fn new(url: String) -> RedisProxy {
         match redis::Client::open(&*url) {
-            Ok(Client) => RedisProxy {
-                client: Some(Client),
+            Ok(client) => RedisProxy {
+                client: Some(client),
             },
-            Err(_) => RedisProxy { client: None },
+            Err(_) => {
+                panic!("Unable to connect to redis !")
+            }
         }
-        // RedisProxy {
-        //     client: Some(redis::Client::open(&*url).),
-        // }
     }
     pub fn has(&self, key: &str) -> bool {
         let result: bool = self.client.as_ref().unwrap().exists(key).unwrap();
