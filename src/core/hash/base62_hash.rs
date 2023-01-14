@@ -1,5 +1,4 @@
-use super::database_core::DatabaseCore;
-use crate::traits;
+use crate::{core::database_core::DatabaseCore, traits};
 
 pub struct Base62Hash {
     url: String,
