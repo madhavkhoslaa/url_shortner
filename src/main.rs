@@ -11,7 +11,10 @@ async fn main() -> std::io::Result<()> {
                 "redis://127.0.0.1/",
             ))))
             .route("/shorten", web::post().to(handlers::api::shorten_url))
-            .route("/shorten/{hash}", web::get().to(handlers::api::get_long_url))
+            .route(
+                "/shorten/{hash}",
+                web::get().to(handlers::api::get_long_url),
+            )
     })
     .bind(("127.0.0.1", 8001))?
     .run()
