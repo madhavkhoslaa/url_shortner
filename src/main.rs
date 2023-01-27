@@ -1,5 +1,5 @@
 use actix_web::{web, App, HttpServer};
-use url_shortner::state::app_state::AppState;
+use url_shortner::{middleware::analytics::Analytics, state::app_state::AppState};
 mod handlers;
 
 #[actix_web::main]
@@ -10,6 +10,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(web::Data::new(AppState::new(String::from(
                 "redis://127.0.0.1/",
             ))))
+            .wrap(Analytics)
             .route("/shorten", web::post().to(handlers::api::shorten_url))
             .route(
                 "/shorten/{hash}",
