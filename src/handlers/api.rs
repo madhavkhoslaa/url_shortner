@@ -10,6 +10,7 @@ pub async fn shorten_url(
     url: web::Json<input::UrlDetails>,
     app_data: web::Data<AppState>,
 ) -> impl Responder {
+    print!("hehe");
     let mut result: String = String::from("Incorrect Option");
     if url.hash_type == Base62Hash {
         let mut base62_hash = factory::Factory::base62(url.url.clone(), app_data.database.clone());

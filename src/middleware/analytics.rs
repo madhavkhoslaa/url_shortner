@@ -1,10 +1,10 @@
+use crate::extractors::analytics as AnalyticsType;
 use actix_web::{
     dev::{forward_ready, Service, ServiceRequest, ServiceResponse, Transform},
     Error as ActixWebError,
 };
 use futures_util::future::LocalBoxFuture;
 use std::future::{ready, Ready};
-
 pub struct Analytics;
 pub struct AnalyticsMiddleware<S> {
     service: S,
@@ -56,11 +56,13 @@ where
     fn call(&self, req: ServiceRequest) -> Self::Future {
         println!("Hi from start. You requested: {}", req.path());
 
-        let fut = self.service.call(req);
+        let x = AnalyticsType::Analytics::new(req.headers());
+        println!("{:?}", x);
 
+        let fut = self.service.call(req);
+        //HeaderMap { inner: {"accept": Value { inner: ["text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"] }, "host": Value { inner: ["127.0.0.1:8001"] }, "sec-fetch-user": Value { inner: ["?1"] }, "user-agent": Value { inner: ["Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/109.0"] }, "sec-fetch-site": Value { inner: ["none"] }, "sec-fetch-mode": Value { inner: ["navigate"] }, "connection": Value { inner: ["keep-alive"] }, "upgrade-insecure-requests": Value { inner: ["1"] }, "accept-language": Value { inner: ["en-US,en;q=0.5"] }, "sec-fetch-dest": Value { inner: ["document"] }, "accept-encoding": Value { inner: ["gzip, deflate, br"] }} }
         Box::pin(async move {
             let res = fut.await?;
-
             // let body = res.clone().into_body();
             // let (http_req, payload): (&HttpRequest, &Payload) = res.parts();
             // let auth_body: web::Json<AuthenticationBody> = web::Json::<AuthenticationBody>::from_request(http_req, &mut *payload).await.unwrap();
