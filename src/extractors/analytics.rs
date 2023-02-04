@@ -10,8 +10,8 @@ pub struct Analytics {
 }
 
 impl Analytics {
-    pub fn new(value: &HeaderMap) -> Analytics {
-        let ip = String::from(value.get("host").unwrap().to_str().unwrap()).split(":").collect::<Vec<&str>>()[0].parse().unwrap();
+    pub fn new(value: &HeaderMap, ip: String) -> Analytics {
+        let ip = String::from(ip).split(":").collect::<Vec<&str>>()[0].parse().unwrap();
         let country: Option<String>;
         let result = iplocate::lookup(ip).unwrap();
         if let Some(ref country_api) = &result.geo_ip.country {
@@ -22,7 +22,7 @@ impl Analytics {
 
         Analytics {
             country,
-            ip: Some(String::from(value.get("host").unwrap().to_str().unwrap())),
+            ip: Some(ip.to_string()),
             user_agent: Some(String::from(
                 value.get("user-agent").unwrap().to_str().unwrap(),
             )),
